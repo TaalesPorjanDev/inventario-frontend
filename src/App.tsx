@@ -1,9 +1,9 @@
-function App() {
-  
+import { HomePage } from "./pages/HomePage"
 
-  return (
-   <h1 className="text- 3xl bg-red-500">Hello React</h1>
-  )
+function App() {
+  return <HomePage />
+    
+  
 }
 
 export default App
