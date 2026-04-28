@@ -9,7 +9,7 @@ export function Menu() {
         {/* logo + título */}
         <div className="flex items-center gap-2">
           <img src={LogoSvg} alt="Logo" className="h-10 w-10" />
-          <h1 className="text-2xl font-bold tracking-tight ">Meu Inventário</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 ">Meu Inventário</h1>
         </div>
 
         {/* botão */}
