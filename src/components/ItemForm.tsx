@@ -93,6 +93,17 @@ export function ItemForm() {
               className='w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none'>
             </textarea>
           </div>
+          <div className='flex justify-end gap-3 pt-4 mt-2 border-t border-gray-100'>
+            <button 
+             type="button" 
+             onClick={() => navigate('/')}
+             className='px-6 py-4 text-[#505F76] hover:bg-gray-100 rounded-md transition-colors'
+            >Cancelar</button>
+            <button 
+             type="submit"
+             className='px-6 py-4 text-white bg-blue-600 rounded-md transition-colors'
+             >Salvar</button>
+          </div>
         </div>
       </form>
     </div>
