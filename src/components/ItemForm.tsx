@@ -51,7 +51,7 @@ export function ItemForm() {
                 name="categoria" id="categoria" value={categoria} 
                 onChange={(event) => setCategoria(event.target.value) } 
                 className='w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'>
-                  <option value="" disabled>Selecione</option>
+                  <option value="">Selecione</option>
                   <option value="Eletrodomésticos">Eletrodomésticos</option>
                   <option value="Eletrônicos">Eletrônicos</option>
                   <option value="Móveis">Móveis</option>
@@ -68,7 +68,7 @@ export function ItemForm() {
                 value={local}
                 onChange={(event) => setLocal(event.target.value)}
                 className='w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'>
-                  <option value="" disabled>Selecione</option>
+                  <option value="">Selecione</option>
                   <option value="Sala">Sala</option>
                   <option value="Quarto">Quarto</option>
                   <option value="Cozinha">Cozinha</option>
@@ -101,7 +101,7 @@ export function ItemForm() {
             >Cancelar</button>
             <button 
              type="submit"
-             className='px-6 py-4 text-white bg-blue-600 rounded-md transition-colors'
+             className='px-6 py-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors'
              >Salvar</button>
           </div>
         </div>
