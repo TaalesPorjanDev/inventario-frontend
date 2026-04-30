@@ -7,6 +7,7 @@ interface ItemStore {
     adicionarItem: (item: Omit<Item, 'id'>) => void;
     removerItem: (id: string) => void;
     carregarItens: () => void;
+    atualizarItem: (id: string, dadosAtualizados: Omit<Item, 'id'>) => void;
 }
 
 export const useItemStore = create<ItemStore>((set,get) => ({
@@ -43,6 +44,15 @@ export const useItemStore = create<ItemStore>((set,get) => ({
     } else {
       set({itens: []})
     }
-  }
+  },
+
+  atualizarItem(id, dadosAtualizados) {
+    const listaAtualizada = get().itens
+    const novaLista = listaAtualizada.map(itemAtual => 
+      itemAtual.id === id ? {...dadosAtualizados, id} : itemAtual 
+    )
+    set({ itens: novaLista})
+    localStorage.setItem('itens', JSON.stringify(novaLista))
+    }
 }))
 

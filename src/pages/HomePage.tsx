@@ -13,8 +13,7 @@ export function HomePage() {
   }, []);
 
   const itensFiltrados = itens.filter((item) => {
-    const mathCategoria =
-      filtroCategoria === '' || item.categoria === filtroCategoria;
+    const mathCategoria = filtroCategoria === '' || item.categoria === filtroCategoria;
     const matchLocal = filtroLocal === '' || item.local === filtroLocal;
     return mathCategoria && matchLocal;
   });
