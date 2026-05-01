@@ -43,11 +43,14 @@ export function EditarItem() {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-16 px-8">
+    <main className="max-w-xl mx-auto mt-16 px-8">
       <form onSubmit={handleSubmit}>
         <h1 className=" text-gray-900 text-3xl font-bold mb-2 ">Editar Item</h1>
 
         <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+
+          <fieldset>
+            <legend className='sr-only'></legend>
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Nome do Item
@@ -117,7 +120,9 @@ export function EditarItem() {
               onChange={(event) => setObservacao(event.target.value)}
               className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             ></textarea>
+            
           </div>
+          </fieldset>
           <div className="flex justify-end gap-3 pt-4 mt-2 border-t border-gray-100">
             <button
               type="submit"
@@ -133,8 +138,9 @@ export function EditarItem() {
               Cancelar
             </button>
           </div>
+          
         </div>
       </form>
-    </div>
+    </main>
   );
 }

@@ -9,12 +9,18 @@ interface ItemCardProps {
 export function ItemCard({item, onDelete}: ItemCardProps) {
     const navigate = useNavigate()
     return (
-        <div className='bg-white rounded-lg shadow-md p-4'>
+        <article className='bg-white rounded-lg shadow-md p-4'>
             <div className='flex justify-between items-start'>
                 <h3 className='text-2xl font-semibold text-gray-900'>{item.nome}</h3>
                 <div className='flex gap-2'>
-                    <Pencil className='text-gray-400 h-5 w-5 cursor-pointer' onClick={() => navigate (`/editar/${item.id}`)}/>
-                    <Trash2 className='text-red-500 h-5 w-5 cursor-pointer' onClick={onDelete}/>
+                    <button onClick={() => navigate (`/editar/${item.id}`)}>
+                        <Pencil className='text-gray-400 h-5 w-5 cursor-pointer' />
+                    </button>
+                    
+                    <button onClick={onDelete}>
+                        <Trash2 className='text-red-500 h-5 w-5 cursor-pointer' />
+                    </button>
+                    
                 </div>
             </div>
             <div className='flex gap-2 mt-2'>
@@ -27,6 +33,6 @@ export function ItemCard({item, onDelete}: ItemCardProps) {
 
             </div>
             
-        </div> 
+        </article> 
     )
 }
