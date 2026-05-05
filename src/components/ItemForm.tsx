@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
+import { useToastStore } from '../store/toastStore';
 
 export function ItemForm() {
+  const { showToast } = useToastStore();
   const { adicionarItem } = useItemStore();
   const navigate = useNavigate();
   const [nome, setNome] = useState('');
@@ -13,15 +15,17 @@ export function ItemForm() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!nome || !categoria || !local) {
-      alert('Preencha todos os campos obrigatórios');
+      showToast("Preencha todos os campos", "error")
       return;
     }
 
     adicionarItem({ nome, categoria, local, observacao });
+    showToast("item adicionado com sucesso!", "success")
     navigate('/');
   }
 
   return (
+    
     <main className="max-w-xl mx-auto mt-16 px-8">
       <form onSubmit={handleSubmit}>
         <h1 className=" text-gray-900 text-3xl font-bold mb-2 ">

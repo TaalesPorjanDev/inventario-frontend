@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
+import { useToastStore } from '../store/toastStore';
 
 export function EditarItem() {
+  const { showToast } = useToastStore();
   const navigate = useNavigate();
 
   const { id: idParam } = useParams<{ id: string }>();
@@ -35,9 +37,10 @@ export function EditarItem() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!nome || !categoria || !local) {
-      alert('Preencha todos os campos corretamente!');
+      showToast("Preencha todos os campos corretamente!", "error");
     } else {
       atualizarItem(id, { nome, categoria, local, observacao });
+      showToast("Item atualizado com sucesso", "success")
       navigate('/')
     }
   }

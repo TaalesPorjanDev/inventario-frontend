@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useItemStore } from '../store/itemStore';
 import { ItemCard } from '../components/ItemCard';
+import { useToastStore } from '../store/toastStore';
 
 export function HomePage() {
   const { itens, removerItem, carregarItens } = useItemStore();
   const [filtroCategoria, setFiltroCategoria] = useState('');
   const [filtroLocal, setFiltroLocal] = useState('');
+  const { showToast } = useToastStore();
 
   useEffect(() => {
     carregarItens();
@@ -76,7 +78,11 @@ export function HomePage() {
             <li key={item.id}>
             <ItemCard
               item={item}
-              onDelete={() => removerItem(item.id)}/>
+              onDelete={() => {
+                removerItem(item.id)
+                showToast("Item Removido com sucesso", "success")
+              }}
+             /> 
             </li>
           ))}
         </ul>

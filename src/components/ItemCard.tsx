@@ -2,6 +2,7 @@ import type { Item } from '../types/item'
 import { Trash2, Pencil } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+
 interface ItemCardProps {
     item: Item;
     onDelete: () => void
