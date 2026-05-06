@@ -5,6 +5,8 @@ import { Menu } from './components/Menu'
 import { EditarItem } from './components/EditarItem'
 import { useToastStore } from './store/toastStore'
 import { Toast } from './components/Toast'
+import { Login } from './pages/Login'
+import { ProtectedRoute } from './components/ProtectedRoute'
 
 
 export function App() {
@@ -15,9 +17,23 @@ export function App() {
     <Menu />
     {visible && <Toast message={message} type={type} onClose={hideToast}/>}
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/adicionar" element={<ItemForm />} />
-      <Route path="/editar/:id" element={<EditarItem />} />
+      <Route path="/login" element={<Login />} />
+
+      <Route path="/" element={
+        <ProtectedRoute>
+          <HomePage />
+        </ProtectedRoute>
+      } />
+      <Route path="/adicionar" element={
+         <ProtectedRoute>
+          <ItemForm />
+         </ProtectedRoute>
+      } />
+      <Route path="/editar/:id" element={
+        <ProtectedRoute>
+          <EditarItem />
+        </ProtectedRoute>
+      } />
     </Routes>
     </>
   )
