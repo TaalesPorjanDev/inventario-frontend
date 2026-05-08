@@ -3,28 +3,28 @@ import LogoSvg from '../assets/logo.svg';
 import { Mail } from 'lucide-react';
 import { Lock } from 'lucide-react';
 import { LogIn } from 'lucide-react';
-import api from '../services/api'
+import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-   async function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
-       event.preventDefault()
-       if(email && password) {
-        localStorage.setItem('token', 'fake-token-123')
-        navigate('/')
-       } else {
-        alert('Preencha email e senha')
-       }
-      
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    
+     try {
+        const resposta = await api.post('/auth/login', {email, password})
+        console.log('Token', resposta.data.accessToken);
+        localStorage.setItem('token', resposta.data.accessToken)
+        navigate('/')                          
+      }  catch {
+        alert('Email ou senha inválidos')
+      } 
   }
 
   return (
-    
-
     <main className="min-h-screen bg-gray-50 flex items-cemter justify-center">
       <div className="w-full max-w-md mt-16">
         <div className="text-center mb-2">
