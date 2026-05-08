@@ -26,7 +26,7 @@ export function Menu() {
 
         <div className="flex items-center gap-4">
           <Link to="/adicionar">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
+            <button className="bg-blue-600 text-white px-2 md:px-4 py-2 rounded-md text-sm md:text-sm hover:bg-blue-700">
               + Novo Item
             </button>
           </Link>
