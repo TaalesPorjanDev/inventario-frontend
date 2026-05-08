@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import api from "../services/api";
 import { useToastStore } from "../store/toastStore";
 
@@ -9,8 +10,10 @@ interface LoginData {
 }
 
 export function useLogin() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
   const showToast = useToastStore((state) => state.showToast);
 
   async function login({ email, password }: LoginData) {
@@ -20,23 +23,31 @@ export function useLogin() {
     }
 
     try {
-      setIsLoading(true);
-      const response = await api.post("/auth/login", { email, password });
+      setLoading(true);
+
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
       const authResponse = response.data.authResponse;
+
       const token = authResponse.accessToken;
 
       localStorage.setItem("token", token);
-      showToast("Login bem-sucedido!", "success");
+
+      showToast("Login realizado com sucesso", "success");
+
       navigate("/");
     } catch {
-        showToast("Email ou senha inválidos", "error");
+      showToast("Email ou senha inválidos", "error");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
-    }
+  }
 
-    return {
-        login,
-        isLoading
-    }
+  return {
+    login,
+    loading,
+  };
 }
