@@ -17,7 +17,7 @@ export function Menu() {
         {/* logo + título */}
         <div className="flex items-center gap-2">
           <img src={LogoSvg} alt="Logo" className="h-10 w-10" />
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 ">
+          <h1 className="hidden md:block text-2xl font-bold tracking-tight text-slate-900 ">
             Meu Inventário
           </h1>
         </div>
@@ -26,11 +26,11 @@ export function Menu() {
 
         <div className="flex items-center gap-4">
           <Link to="/adicionar">
-            <button className="bg-blue-600 text-white px-2 md:px-4 py-2 rounded-md text-sm md:text-sm hover:bg-blue-700">
+            <button className="bg-blue-600 text-white  w-full px-2 md:px-4 py-1.5 rounded-md text-sm md:text-sm whitespace-nowrap hover:bg-blue-700">
               + Novo Item
             </button>
           </Link>
-          <button className='bg-red-500 text-white hover:bg-red-700 rounded-md px-3 py-1.5' onClick={handleLogout}>Sair</button>
+          <button className='bg-red-500 text-white hover:bg-red-700 rounded-md px-3 md:px-4 py-2 text-xs md:text-sm whitespace-nowrap' onClick={handleLogout}>Sair</button>
         </div>
       </div>
     </nav>
