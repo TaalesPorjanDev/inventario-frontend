@@ -4,6 +4,7 @@ import { useItemStore } from '../store/itemStore';
 import { ItemCard } from '../components/ItemCard';
 import { useToastStore } from '../store/toastStore';
 
+
 export function HomePage() {
   const { itens, removerItem, carregarItens } = useItemStore();
   const [filtroCategoria, setFiltroCategoria] = useState('');
@@ -68,7 +69,7 @@ export function HomePage() {
             </div>
             
           </div>
-          <p className="text-sm text-gray-500 mb-4 hidden md:block">
+          <p className="text-sm text-gray-500 mb-4 md:hidden">
               {itensFiltrados.length} itens no total
             </p>
         </aside>

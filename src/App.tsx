@@ -8,6 +8,7 @@ import { EditarItem } from "./components/EditarItem";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Layout } from "./components/Layout";
 import { Toast } from "./components/Toast";
+import { ItemDetalhes } from "./pages/ItemDetalhes";
 
 import { useToastStore } from "./store/toastStore";
 
@@ -46,7 +47,16 @@ export function App() {
               </ProtectedRoute>
             }
           />
+           <Route
+            path="/detalhes/:id"
+            element={
+              <ProtectedRoute>
+                <ItemDetalhes />
+              </ProtectedRoute>
+            }
+          /> 
         </Route>
+        
       </Routes>
 
       {visible && <Toast message={message} type={type} onClose={hideToast} />}
