@@ -11,6 +11,7 @@ import { Toast } from "./components/Toast";
 import { ItemDetalhes } from "./pages/ItemDetalhes";
 
 import { useToastStore } from "./store/toastStore";
+import { Register } from "./pages/Register";
 
 export function App() {
   const { visible, message, type, hideToast } = useToastStore();
@@ -55,7 +56,10 @@ export function App() {
               </ProtectedRoute>
             }
           /> 
+
+          <Route path="/register" element={<Register />} />
         </Route>
+
         
       </Routes>
 
