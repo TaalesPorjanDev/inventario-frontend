@@ -1,20 +1,21 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import LogoSvg from "../assets/logo.svg";
+import LogoSvg from '../assets/logo.svg';
 
-import { Mail, Lock, LogIn, Loader2 } from "lucide-react";
+import { Mail, Lock, LogIn, Loader2 } from 'lucide-react';
 
-import { useLogin } from "../hooks/useLogin";
+import { useLogin } from '../hooks/useLogin';
+import { Link } from 'react-router-dom';
 
 export function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const { login, loading } = useLogin();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    
+
     await login({
       email,
       password,
@@ -85,7 +86,7 @@ export function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors mt-2 flex items-center justify-center disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors mt-5 flex items-center justify-center disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -96,6 +97,12 @@ export function Login() {
                 </>
               )}
             </button>
+            <div className="text-center text-sm text-gray-600 mt-4">
+              Ainda não possui uma conta?{' '}
+              <Link to="/register" className="text-blue-600 hover:underline">
+                Cadastre-se agora
+              </Link>
+            </div>
           </form>
         </div>
       </div>

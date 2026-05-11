@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import LogoSvg from '../assets/logo.svg';
+import { useToastStore } from '../store/toastStore';
 
 export function Register() {
+  const {showToast} = useToastStore()
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,17 +16,17 @@ export function Register() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!fullName || !email || !password || !confirmPassword) {
-      alert('Preencha todos os campos');
+      showToast('Preencha todos os campos', 'error')
       return;
     }
 
     if (password !== confirmPassword) {
-      alert('Senha não coincidem');
+      showToast('Senha não coincidem', 'error')
       return;
     }
 
     if (password.length < 6) {
-      alert('A senha precisa ter no minimo de 6 caracteres');
+      showToast('A senha precisa ter no mínimo 6 caracteres', 'error')
       return;
     }
 
@@ -34,10 +36,10 @@ export function Register() {
         email: email,
         password: password,
       });
-      alert('Cadastro realizado com sucesso!');
+      showToast('Cadastro realizado com sucesso!', 'success')
       navigate('/login');
     } catch (error) {
-      alert('Erro ao cadastrar. Tente Novamente');
+      showToast('Erro ao cadastrar. Tente novamente.', 'error')
     }
   }
   return (

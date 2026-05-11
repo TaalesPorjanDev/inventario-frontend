@@ -56,10 +56,8 @@ export function App() {
               </ProtectedRoute>
             }
           /> 
-
-          <Route path="/register" element={<Register />} />
         </Route>
-
+            <Route path="/register" element={<Register />} />
         
       </Routes>
 
