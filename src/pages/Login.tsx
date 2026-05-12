@@ -24,7 +24,7 @@ export function Login() {
 
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="w-full max-w-md mt-32">
+      <div className="w-full max-w-md mt-8">
         <div className="text-center mb-2">
           <img
             src={LogoSvg}

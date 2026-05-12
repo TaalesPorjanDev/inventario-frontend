@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
 import { useToastStore } from '../store/toastStore';
+import { Camera} from 'lucide-react';
+import { Clock } from 'lucide-react';
 
 export function ItemForm() {
   const { showToast } = useToastStore();
@@ -11,6 +13,7 @@ export function ItemForm() {
   const [categoria, setCategoria] = useState('');
   const [local, setLocal] = useState('');
   const [observacao, setObservacao] = useState('');
+  const [imageUrl, setImageUrl] = useState('')
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,7 +22,7 @@ export function ItemForm() {
       return;
     }
 
-    adicionarItem({ nome, categoria, local, observacao });
+    adicionarItem({ nome, categoria, local, observacao, imageUrl });
     showToast("item adicionado com sucesso!", "success")
     navigate('/');
   }
@@ -127,6 +130,16 @@ export function ItemForm() {
               </button>
             </div>
           </fieldset>
+        </div>
+        <div className='flex flex-col md:flex-row gap-6 mt-6'>
+          <div className='flex-1 flex flex-col items-center justify-center bg-blue-50 p-6 rounded-lg'>
+            <Camera className='h-5 w-5 text-blue-600 mb-2'/>
+            <h3 className='font-semibold text-gray-700'>Adicionar Foto</h3>
+          </div>
+          <Link to='/recentes' className='flex-1 flex flex-col items-center justify-center bg-blue-50 p-6 rounded-lg'>
+            <Clock className='h-5 w-5 text-blue-600 mb-2'/>
+            <h3 className='font-semibold text-gray-700 '>Itens Recentes</h3>
+          </Link>
         </div>
       </form>
     </main>
