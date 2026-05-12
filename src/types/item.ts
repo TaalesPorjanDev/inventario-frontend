@@ -4,4 +4,5 @@ export interface Item {
     categoria: string;
     local: string;
     observacao?: string;
+    imageUrl?: string;
 }
