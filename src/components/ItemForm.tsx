@@ -13,7 +13,7 @@ export function ItemForm() {
   const [categoria, setCategoria] = useState('');
   const [local, setLocal] = useState('');
   const [observacao, setObservacao] = useState('');
-  const [imageUrl, setImageUrl] = useState('')
+  /* const [imageUrl] = useState('') */
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,7 +22,7 @@ export function ItemForm() {
       return;
     }
 
-    adicionarItem({ nome, categoria, local, observacao, imageUrl });
+    adicionarItem({ nome, categoria, local, observacao });
     showToast("item adicionado com sucesso!", "success")
     navigate('/');
   }
