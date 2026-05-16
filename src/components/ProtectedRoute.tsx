@@ -1,23 +1,36 @@
 import { Navigate } from "react-router-dom";
-import React from "react";
-
-import { isValidToken } from "../utils/isValidToken";
+import { useEffect, useState } from "react";
+import api from "../services/api";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  redirectTo?: string;
 }
 
-export function ProtectedRoute({
-  children,
-  redirectTo = "/login",
-}: ProtectedRouteProps) {
-  const token = localStorage.getItem("token");
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  if (!token || !isValidToken(token)) {
-    localStorage.removeItem("token");
+  useEffect(() => {
+    async function validate() {
+      try {
+        await api.get("/auth/me", {
+          withCredentials: true,
+        });
 
-    return <Navigate to={redirectTo} replace />;
+        setIsAuthenticated(true);
+      } catch {
+        setIsAuthenticated(false);
+      }
+    }
+
+    validate();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
   }
 
   return children;

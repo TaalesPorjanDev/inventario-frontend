@@ -2,20 +2,29 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
 import { useToastStore } from '../store/toastStore';
+import { useForm } from 'react-hook-form';
+import { Loader2 } from 'lucide-react';
+
+interface EditFormData {
+  nome: string;
+  categoria: string;
+  local: string;
+  observacao: string
+}
+
 
 export function EditarItem() {
   const { showToast } = useToastStore();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<EditFormData>();
   const { id: idParam } = useParams<{ id: string }>();
   const id = idParam!;
 
   const { itens, atualizarItem } = useItemStore();
 
-  const [nome, setNome] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [local, setLocal] = useState('');
-  const [observacao, setObservacao] = useState('');
+  
 
   const itemAtual = itens.find((item) => item.id === id);
 
@@ -27,27 +36,34 @@ export function EditarItem() {
 
   useEffect(() => {
     if (itemAtual) {
-      setNome(itemAtual.nome);
-      setCategoria(itemAtual.categoria);
-      setLocal(itemAtual.local);
-      setObservacao(itemAtual.observacao ?? '');
+      reset({
+        nome: itemAtual.nome,
+        categoria: itemAtual.categoria,
+        local: itemAtual.local,
+        observacao: itemAtual.observacao,
+      })
     }
-  }, [itemAtual]);
+  }, [itemAtual, reset]);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!nome || !categoria || !local) {
-      showToast("Preencha todos os campos corretamente!", "error");
-    } else {
-      atualizarItem(id, { nome, categoria, local, observacao });
+  function onSubmit(data: EditFormData) {
+    setIsSubmitting(true)
+    try {
+      atualizarItem(id, data)
       showToast("Item atualizado com sucesso", "success")
-      navigate('/')
+      setTimeout(() => {
+        setIsSubmitting(false)
+        navigate('/')
+      }, 1000)
+
+    } catch(error) {
+      setIsSubmitting(false)
+      showToast("Erro ao adicionar item", "error")
     }
   }
 
   return (
     <main className="max-w-xl mx-auto mt-16 px-8">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className=" text-gray-900 text-3xl font-bold mb-2 ">Editar Item</h1>
 
         <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
@@ -59,12 +75,15 @@ export function EditarItem() {
               Nome do Item
             </label>
             <input
-              value={nome}
-              onChange={(event) => setNome(event.target.value)}
+              {...register('nome', {
+                required: "Nome é obrigatório",
+                minLength: { value: 3, message: "Mínimo de 3 caracteres" }
+              })}
               type="text"
               placeholder="Ex: Câmera Mirrorless"
               className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.nome && <span className='text-red-500 text-sm'>{errors.nome.message}</span>}
           </div>
 
           <div className="flex gap-4 mb-6">
@@ -73,10 +92,8 @@ export function EditarItem() {
                 Categoria
               </label>
               <select
-                name="categoria"
+                {...register('categoria', {required: "Categoria é obrigatória"})}
                 id="categoria"
-                value={categoria}
-                onChange={(event) => setCategoria(event.target.value)}
                 className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Selecione</option>
@@ -86,6 +103,7 @@ export function EditarItem() {
                 <option value="Decoração">Decoração</option>
                 <option value="Outros">Outros</option>
               </select>
+              {errors.categoria && <span className='text-red-500 text-sm'>{errors.categoria.message}</span>}
             </div>
 
             <div className="flex-1">
@@ -93,10 +111,8 @@ export function EditarItem() {
                 Localização
               </label>
               <select
-                name="localizacao"
+                {...register('local', { required: "Localização é obrigatória" })}
                 id="localizacao"
-                value={local}
-                onChange={(event) => setLocal(event.target.value)}
                 className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Selecione</option>
@@ -107,6 +123,7 @@ export function EditarItem() {
                 <option value="Garagem">Garagem</option>
                 <option value="Outros">Outros</option>
               </select>
+              {errors.local && <span className='text-red-500 text-sm'>{errors.local.message}</span>}
             </div>
           </div>
           <div className="mb-6">
@@ -115,23 +132,33 @@ export function EditarItem() {
               <span className="text-gray-400 text-xs ml-2">Opcional</span>
             </label>
             <textarea
-              name="observacao"
+              {...register('observacao')}
               id="observacao"
-              value={observacao}
+              
               rows={6}
               placeholder="Adicione detalhes como número de série, data de compra..."
-              onChange={(event) => setObservacao(event.target.value)}
+              
               className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             ></textarea>
+            {errors.observacao && <span className='text-red-500 text-sm'>{errors.observacao.message}</span>}
             
           </div>
           </fieldset>
           <div className="flex justify-end gap-3 pt-4 mt-2 border-t border-gray-100">
             <button
               type="submit"
-              className="px-6 py-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+              disabled={isSubmitting}
+              className="px-6 py-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors 
+              flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              Salvar Alteraçoes
+              {isSubmitting ? (
+                <>
+                  <Loader2 className='h-4 w-4 animate-spin' />
+                  Salvando alterações...
+                </>
+              ): (
+                "Salvar"
+              )}
             </button>
             <button
               type="button"
