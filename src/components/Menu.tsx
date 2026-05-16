@@ -1,14 +1,25 @@
 import LogoSvg from '../assets/logo.svg';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 export function Menu() {
   const navigate = useNavigate();
 
-  function handleLogout() {
-    localStorage.removeItem('token')
-    navigate('/login')
-    
+  async function handleLogout() {
+    try {
+      await api.post(
+        "/auth/logout",
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
