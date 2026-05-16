@@ -27,7 +27,9 @@ export function useLogin() {
 
       const response = await api.post("/auth/login", {
         email,
-        password,
+        password
+      }, {
+        withCredentials: true
       });
 
       const authResponse = response.data.authResponse;

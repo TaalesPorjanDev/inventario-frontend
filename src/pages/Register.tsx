@@ -38,7 +38,13 @@ export function Register() {
       });
       showToast('Cadastro realizado com sucesso!', 'success')
       navigate('/login');
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message.includes('Email already exists')) {
+          showToast('Email já cadastrado', 'error')
+          return;
+        }
+      }
       showToast('Erro ao cadastrar. Tente novamente.', 'error')
     }
   }
