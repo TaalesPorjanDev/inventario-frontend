@@ -15,7 +15,7 @@ interface RegisterFormData {
 
 export function Register() {
   const {showToast} = useToastStore()
-  const { register, handleSubmit, formState: {errors}, watch, reset} = useForm<RegisterFormData>()
+  const { register, handleSubmit, formState: {errors}, watch} = useForm<RegisterFormData>()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate();
 
@@ -33,9 +33,17 @@ export function Register() {
         setIsSubmitting(false)
         navigate('/login');
       },1000)
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message.includes('Email already exists')) {
+          showToast('Email já cadastrado. Faça login ou use outro email.', 'error')
+        } else {
+          showToast('Erro ao cadastrar. Tente novamente.', 'error')
+        }
+      } else {
+        showToast('Erro ao cadastrar. Tente novamente.', 'error')
+      }
       setIsSubmitting(false)
-      showToast('Erro ao cadastrar. Tente novamente.', 'error')
     }
   }
   return (
