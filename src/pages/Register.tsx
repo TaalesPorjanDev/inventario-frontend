@@ -1,27 +1,30 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import LogoSvg from '../assets/logo.svg';
+import { Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useToastStore } from '../store/toastStore';
 import { useForm } from 'react-hook-form'
-import { Loader2 } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod'
+import { registerSchema } from '../schemas/registerSchema';
 
-interface RegisterFormData {
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string
-}
+
+type RegisterFormData = z.infer<typeof registerSchema>
 
 export function Register() {
   const {showToast} = useToastStore()
-  const { register, handleSubmit, formState: {errors}, watch} = useForm<RegisterFormData>()
+  const { register, handleSubmit, formState: {errors}, watch} = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema)
+  })
+  
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate();
 
   async function onSubmit(data: RegisterFormData ) {
     setIsSubmitting(true)
-   try {
+    
+    try {
       const {fullName, email, password} = data
       await api.post('/auth/register', {
         fullName: fullName,
@@ -70,11 +73,7 @@ export function Register() {
               Nome Completo
             </label>
             <input
-              {...register('fullName', {
-              required: "Nome completo é obrigatório",
-              minLength: {value: 9, message: "Nome completo deve ter no minimo 9 caracteres"}
-              
-              })}
+              {...register('fullName')}
               type="text"
               placeholder="Ex: João Silva"
               className="w-full pl-3.5 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -84,10 +83,7 @@ export function Register() {
               E-mail
             </label>
             <input
-            {...register('email', {
-              required: "email é obrigatório",
-              minLength: {value: 15, message: "O email deve ter no mínimo de 15 caracteres"}
-            })}
+            {...register('email')}
               type="email"
               
               placeholder="seu@email.com"
@@ -98,10 +94,7 @@ export function Register() {
               Senha
             </label>
             <input
-               {...register('password', {
-              required: "senha é obrigatório",
-              minLength: {value: 6, message: "A senha deve ter no minimo de 6 caracteres"}
-              })}
+               {...register('password')}
               type="password"
               
               placeholder="*********"
@@ -112,10 +105,7 @@ export function Register() {
               Confirmar Senha
             </label>
             <input
-               {...register('confirmPassword', {
-              required: "Confirme sua senha",
-              validate: (value) => value === watch('password') || "As senhas não coincidem"
-              })}
+               {...register('confirmPassword')}
              
               placeholder="*********"
               className="w-full pl-3.5 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
