@@ -14,7 +14,7 @@ type RegisterFormData = z.infer<typeof registerSchema>
 
 export function Register() {
   const {showToast} = useToastStore()
-  const { register, handleSubmit, formState: {errors}, watch} = useForm<RegisterFormData>({
+  const { register, handleSubmit, formState: {errors} } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema)
   })
   
