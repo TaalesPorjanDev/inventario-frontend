@@ -1,36 +1,53 @@
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
 import { useToastStore } from '../store/toastStore';
 import { Camera} from 'lucide-react';
 import { Clock } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { Loader2 } from 'lucide-react';
+
+
+interface ItemFormData {
+  nome: string;
+  categoria: string;
+  local: string;
+  observacao: string;
+}
+
+
 
 export function ItemForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { register, handleSubmit, formState: { errors } } = useForm<ItemFormData>();
   const { showToast } = useToastStore();
   const { adicionarItem } = useItemStore();
   const navigate = useNavigate();
-  const [nome, setNome] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [local, setLocal] = useState('');
-  const [observacao, setObservacao] = useState('');
-  /* const [imageUrl] = useState('') */
+  
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!nome || !categoria || !local) {
-      showToast("Preencha todos os campos", "error")
-      return;
+  function onSubmit(data: ItemFormData) {
+    setIsSubmitting(true)
+    try {
+      const { nome, categoria, local, observacao} = data
+      adicionarItem({ nome, categoria, local, observacao });
+      showToast("item adicionado com sucesso!", "success")
+
+      setTimeout(() => {
+        setIsSubmitting(false)
+        navigate('/')
+      }, 1000)  
+
+    } catch (error) {
+      setIsSubmitting(false)
+      showToast("Erro ao adicionar item", "error")
     }
-
-    adicionarItem({ nome, categoria, local, observacao });
-    showToast("item adicionado com sucesso!", "success")
-    navigate('/');
   }
 
   return (
     
     <main className="max-w-xl mx-auto mt-16 px-8">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className=" text-gray-900 text-3xl font-bold mb-2 ">
           Adicionar Novo Item
         </h1>
@@ -47,12 +64,16 @@ export function ItemForm() {
                 Nome do Item
               </label>
               <input
-                value={nome}
-                onChange={(event) => setNome(event.target.value)}
+                {...register('nome', {
+                required: "Nome é obrigatório",
+                minLength: {value: 3, message: "Nome deve ter no mínimo 3 caracteres"}
+                })}
                 type="text"
                 placeholder="Ex: Câmera Mirrorless"
                 className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                
               />
+              {errors.nome && <span className='text-red-500 text-sm'>{errors.nome.message}</span>}
             </div>
 
             <div className="flex gap-4 mb-6">
@@ -61,12 +82,11 @@ export function ItemForm() {
                   Categoria
                 </label>
                 <select
-                  name="categoria"
+                  {...register('categoria' ,{required: "Categoria é obrigatório"})}
                   id="categoria"
-                  value={categoria}
-                  onChange={(event) => setCategoria(event.target.value)}
                   className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
+                  >
+                  
                   <option value="">Selecione</option>
                   <option value="Eletrodomésticos">Eletrodomésticos</option>
                   <option value="Eletrônicos">Eletrônicos</option>
@@ -74,6 +94,7 @@ export function ItemForm() {
                   <option value="Decoração">Decoração</option>
                   <option value="Outros">Outros</option>
                 </select>
+                {errors.categoria && <span className='text-red-500 text-sm'>{errors.categoria.message}</span>}
               </div>
 
               <div className="flex-1">
@@ -81,10 +102,8 @@ export function ItemForm() {
                   Localização
                 </label>
                 <select
-                  name="localizacao"
+                  {...register('local', {required: "Localização é obrigatório"})}
                   id="localizacao"
-                  value={local}
-                  onChange={(event) => setLocal(event.target.value)}
                   className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Selecione</option>
@@ -95,6 +114,7 @@ export function ItemForm() {
                   <option value="Garagem">Garagem</option>
                   <option value="Outros">Outros</option>
                 </select>
+                {errors.local && <span className='text-red-500 text-sm'>{errors.local.message}</span>}
               </div>
             </div>
 
@@ -104,14 +124,15 @@ export function ItemForm() {
                 <span className="text-gray-400 text-xs ml-2">Opcional</span>
               </label>
               <textarea
-                name="observacao"
+                {...register('observacao')}
                 id="observacao"
-                value={observacao}
+                
                 rows={6}
                 placeholder="Adicione detalhes como número de série, data de compra..."
-                onChange={(event) => setObservacao(event.target.value)}
+                
                 className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               ></textarea>
+              {errors.observacao && <span className='text-red-500 text-sm'>{errors.observacao.message}</span>}
             </div>
 
             <div className="flex justify-end gap-3 pt-4 mt-2 border-t border-gray-100">
@@ -124,9 +145,19 @@ export function ItemForm() {
               </button>
               <button
                 type="submit"
-                className="px-6 py-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+                disabled={isSubmitting}
+                className="px-6 py-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors 
+                flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                Salvar
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className='h-4 w-4 animate-spin'/>
+                    Salvando...
+                  </>
+                ) : (
+                  "Salvar"
+                )}
+                
               </button>
             </div>
           </fieldset>

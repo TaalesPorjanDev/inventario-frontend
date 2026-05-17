@@ -25,16 +25,12 @@ export function useLogin() {
     try {
       setLoading(true);
 
-      const response = await api.post("/auth/login", {
+      await api.post("/auth/login", {
         email,
-        password,
+        password
+      }, {
+        withCredentials: true
       });
-
-      const authResponse = response.data.authResponse;
-
-      const token = authResponse.accessToken;
-
-      localStorage.setItem("token", token);
 
       showToast("Login realizado com sucesso", "success");
 

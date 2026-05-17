@@ -1,14 +1,25 @@
 import LogoSvg from '../assets/logo.svg';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 export function Menu() {
   const navigate = useNavigate();
 
-  function handleLogout() {
-    localStorage.removeItem('token')
-    navigate('/login')
-    
+  async function handleLogout() {
+    try {
+      await api.post(
+        "/auth/logout",
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -26,7 +37,7 @@ export function Menu() {
 
         <div className="flex items-center gap-4">
           <Link to="/adicionar">
-            <button className="bg-blue-600 text-white  w-full px-2 md:px-4 py-1.5 rounded-md text-sm md:text-sm whitespace-nowrap hover:bg-blue-700">
+            <button className="bg-blue-600 text-white  w-full px-3 md:px-4 py-2 rounded-md text-sm md:text-sm whitespace-nowrap hover:bg-blue-700">
               + Novo Item
             </button>
           </Link>
