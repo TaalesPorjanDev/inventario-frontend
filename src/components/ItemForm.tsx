@@ -7,20 +7,18 @@ import { Camera} from 'lucide-react';
 import { Clock } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
+import { itemSchema } from '../schemas/itemSchema';
+import type z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-
-interface ItemFormData {
-  nome: string;
-  categoria: string;
-  local: string;
-  observacao: string;
-}
-
-
+type ItemFormData = z.infer<typeof itemSchema>;
 
 export function ItemForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { register, handleSubmit, formState: { errors } } = useForm<ItemFormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<ItemFormData>({
+    resolver: zodResolver(itemSchema)
+  });
+  
   const { showToast } = useToastStore();
   const { adicionarItem } = useItemStore();
   const navigate = useNavigate();
@@ -64,10 +62,7 @@ export function ItemForm() {
                 Nome do Item
               </label>
               <input
-                {...register('nome', {
-                required: "Nome é obrigatório",
-                minLength: {value: 3, message: "Nome deve ter no mínimo 3 caracteres"}
-                })}
+                {...register('nome')}
                 type="text"
                 placeholder="Ex: Câmera Mirrorless"
                 className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -82,7 +77,7 @@ export function ItemForm() {
                   Categoria
                 </label>
                 <select
-                  {...register('categoria' ,{required: "Categoria é obrigatório"})}
+                  {...register('categoria')}
                   id="categoria"
                   className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
@@ -102,7 +97,7 @@ export function ItemForm() {
                   Localização
                 </label>
                 <select
-                  {...register('local', {required: "Localização é obrigatório"})}
+                  {...register('local')}
                   id="localizacao"
                   className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
