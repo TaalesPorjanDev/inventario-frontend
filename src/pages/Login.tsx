@@ -1,6 +1,6 @@
 import LogoSvg from '../assets/logo.svg';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, LogIn, Loader2, SpaceIcon } from 'lucide-react';
+import { Mail, Lock, LogIn, Loader2 } from 'lucide-react';
 import { useLogin } from '../hooks/useLogin';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod'
