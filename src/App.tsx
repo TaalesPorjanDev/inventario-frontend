@@ -13,9 +13,15 @@ import { ItemDetalhes } from "./pages/ItemDetalhes";
 import { useToastStore } from "./store/toastStore";
 import { Register } from "./pages/Register";
 import { RecentItens } from "./pages/RecentItens";
+import { useEffect } from "react";
+import { validateAuth } from "./hooks/validateAuth";
 
 export function App() {
   const { visible, message, type, hideToast } = useToastStore();
+
+  useEffect(() => {
+    validateAuth();
+  }, []);
 
   return (
     <>
