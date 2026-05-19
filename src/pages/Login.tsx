@@ -1,24 +1,25 @@
-import { useState } from 'react';
-
 import LogoSvg from '../assets/logo.svg';
-
-import { Mail, Lock, LogIn, Loader2 } from 'lucide-react';
-
-import { useLogin } from '../hooks/useLogin';
 import { Link } from 'react-router-dom';
+import { Mail, Lock, LogIn, Loader2 } from 'lucide-react';
+import { useLogin } from '../hooks/useLogin';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { LoginSchema } from '../schemas/LoginSchema';
+
+type LoginData = z.infer<typeof LoginSchema>
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  
+  const { register, handleSubmit, formState: {errors}} = useForm<LoginData>({
+    resolver: zodResolver(LoginSchema)
+  })
   const { login, loading } = useLogin();
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  async function onSubmit(data:LoginData) {
     await login({
-      email,
-      password,
+      email: data.email,
+      password: data.password
     });
   }
 
@@ -40,7 +41,7 @@ export function Login() {
         </p>
 
         <div className="bg-white p-6 rounded-lg border border-gray-200 w-full max-w-md">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="relative mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Email
@@ -50,13 +51,13 @@ export function Login() {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
 
                 <input
+                  {...register('email')}
                   type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
                   placeholder="nome@exemplo.com"
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+              {errors.email && <span className='text-red-500 text-sm'>{errors.email.message}</span>}
             </div>
 
             <div className="relative mb-4">
@@ -74,13 +75,13 @@ export function Login() {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
 
                 <input
+                  {...register('password')}
                   type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
                   placeholder="********"
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+              {errors.password && <span className='text-red-500 text-sm'>{errors.password.message}</span>}
             </div>
 
             <button
