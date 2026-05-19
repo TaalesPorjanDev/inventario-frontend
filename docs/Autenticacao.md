@@ -78,3 +78,24 @@ Motivação das mudanças
 - `setLoading(true)` evita janelas onde `loading` poderia estar `false` enquanto uma revalidação está em andamento (especialmente em revalidações manuais ou múltiplos mounts).
 - `logout()` dá uma forma centralizada e síncrona de resetar o estado de autenticação sem depender de efeitos colaterais externos.
 - Tratar `401` no interceptor garante que, se o servidor invalidar a sessão (por expiração de cookie, revogação, etc.), a UI seja atualizada e rotas protegidas redirecionem imediatamente para `/login`.
+
+Novas funcionalidades implementadas
+
+- `POST /auth/logout` ao deslogar: adicionado o hook `src/hooks/useLogout.ts` que realiza um `POST /auth/logout` (com `withCredentials: true`) e, independentemente do resultado, chama `useAuthStore.getState().logout()` e navega para `/login`.
+- Redirecionamento automático ao `401`: o interceptor de respostas em `src/services/api.ts` agora chama `useAuthStore.getState().logout()` e faz `window.location.replace('/login')` quando recebe `401` do servidor.
+
+Uso sugerido
+
+- Para deslogar a partir de um componente, use o hook `useLogout()` e chame `logout()`.
+
+Exemplo:
+
+```tsx
+import { useLogout } from "../hooks/useLogout";
+
+function LogoutButton() {
+  const { logout } = useLogout();
+
+  return <button onClick={logout}>Sair</button>;
+}
+```

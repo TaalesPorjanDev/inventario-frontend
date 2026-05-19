@@ -25,15 +25,24 @@ api.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401) {
-      // Se a API indicar que o usuário não está autorizado, atualizar a store.
+      // Se a API indicar que o usuário não está autorizado, limpar estado local e redirecionar para login.
       try {
-        useAuthStore.getState().setAuthenticated(false);
-        useAuthStore.getState().setLoading(false);
+        useAuthStore.getState().logout();
       } catch (e: unknown) {
         if (e instanceof Error) {
-          console.error("Erro ao atualizar estado de autenticação:", e.message);
+          console.error("Erro ao limpar estado de autenticação:", e.message);
         }
-        // silencioso: falhas aqui não devem quebrar o fluxo principal
+      }
+
+      try {
+        if (typeof window !== "undefined") {
+          window.location.replace("/login");
+        }
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          console.error("Erro ao redirecionar para login:", e.message);
+        }
+        // se window falhar, nada a fazer aqui
       }
     } else {
       console.error(error);
