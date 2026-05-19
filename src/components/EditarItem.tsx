@@ -1,31 +1,28 @@
+import { itemSchema } from '../schemas/itemSchema';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
 import { useToastStore } from '../store/toastStore';
 import { useForm } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod';
 
-interface EditFormData {
-  nome: string;
-  categoria: string;
-  local: string;
-  observacao: string
-}
 
+type ItemFormData = z.infer<typeof itemSchema>
 
 export function EditarItem() {
   const { showToast } = useToastStore();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<EditFormData>();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<ItemFormData>({
+    resolver: zodResolver(itemSchema)
+  });
   const { id: idParam } = useParams<{ id: string }>();
   const id = idParam!;
 
   const { itens, atualizarItem } = useItemStore();
-
-  
-
   const itemAtual = itens.find((item) => item.id === id);
 
   useEffect(() => {
@@ -45,7 +42,7 @@ export function EditarItem() {
     }
   }, [itemAtual, reset]);
 
-  function onSubmit(data: EditFormData) {
+  function onSubmit(data: ItemFormData) {
     setIsSubmitting(true)
     try {
       atualizarItem(id, data)
@@ -75,10 +72,7 @@ export function EditarItem() {
               Nome do Item
             </label>
             <input
-              {...register('nome', {
-                required: "Nome é obrigatório",
-                minLength: { value: 3, message: "Mínimo de 3 caracteres" }
-              })}
+              {...register('nome')}
               type="text"
               placeholder="Ex: Câmera Mirrorless"
               className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -92,7 +86,7 @@ export function EditarItem() {
                 Categoria
               </label>
               <select
-                {...register('categoria', {required: "Categoria é obrigatória"})}
+                {...register('categoria')}
                 id="categoria"
                 className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -111,7 +105,7 @@ export function EditarItem() {
                 Localização
               </label>
               <select
-                {...register('local', { required: "Localização é obrigatória" })}
+                {...register('local')}
                 id="localizacao"
                 className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
