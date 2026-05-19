@@ -1,16 +1,12 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 import { useEffect } from "react";
 
-import { useAuthStore } from "../store/authStore";
-
 import { validateAuth } from "../hooks/validateAuth";
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
+import { useAuthStore } from "../store/authStore";
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
+export function ProtectedLayout() {
   const { isAuthenticated, loading } = useAuthStore();
 
   useEffect(() => {
@@ -25,5 +21,5 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return <Outlet />;
 }

@@ -5,14 +5,12 @@ import { Login } from "./pages/Login";
 
 import { ItemForm } from "./components/ItemForm";
 import { EditarItem } from "./components/EditarItem";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Layout } from "./components/Layout";
 import { Toast } from "./components/Toast";
-import { ItemDetalhes } from "./pages/ItemDetalhes";
 
 import { useToastStore } from "./store/toastStore";
 import { Register } from "./pages/Register";
-import { RecentItens } from "./pages/RecentItens";
+import { ProtectedLayout } from "./components/ProtectedLayout";
 
 export function App() {
   const { visible, message, type, hideToast } = useToastStore();
@@ -21,53 +19,15 @@ export function App() {
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        <Route element={<Layout />}>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/adicionar"
-            element={
-              <ProtectedRoute>
-                <ItemForm />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/editar/:id"
-            element={
-              <ProtectedRoute>
-                <EditarItem />
-              </ProtectedRoute>
-            }
-          />
-           <Route
-            path="/detalhes/:id"
-            element={
-              <ProtectedRoute>
-                <ItemDetalhes />
-              </ProtectedRoute>
-            }
-          /> 
-           <Route
-            path="/recentes"
-            element={
-              <ProtectedRoute>
-                <RecentItens />
-              </ProtectedRoute>
-            }
-          />
+        <Route element={<ProtectedLayout />}>
+          <Route element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/adicionar" element={<ItemForm />} />
+            <Route path="/editar/:id" element={<EditarItem />} />
+          </Route>
         </Route>
-            <Route path="/register" element={<Register />} />
-        
       </Routes>
 
       {visible && <Toast message={message} type={type} onClose={hideToast} />}
