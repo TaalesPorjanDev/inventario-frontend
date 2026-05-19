@@ -71,13 +71,13 @@ Mudanças aplicadas neste commit
 
 - `src/hooks/validateAuth.ts`: agora chama `setLoading(true)` no início da verificação para garantir que o estado de carregamento reflita a checagem em andamento.
 - `src/store/authStore.ts`: adicionado método `logout()` que reseta `isAuthenticated` para `false` e `loading` para `false` (útil para limpar estado ao deslogar).
-- `src/services/api.ts`: interceptor de respostas agora trata `401` explicitamente chamando `useAuthStore.getState().setAuthenticated(false)` e `setLoading(false)` para sincronizar o estado do frontend quando o backend rejeita a sessão.
+- `src/services/api.ts`: interceptor de respostas agora trata `401` explicitamente chamando `useAuthStore.getState().logout()` para sincronizar o estado do frontend quando o backend rejeita a sessão.
 
 Motivação das mudanças
 
 - `setLoading(true)` evita janelas onde `loading` poderia estar `false` enquanto uma revalidação está em andamento (especialmente em revalidações manuais ou múltiplos mounts).
 - `logout()` dá uma forma centralizada e síncrona de resetar o estado de autenticação sem depender de efeitos colaterais externos.
-- Tratar `401` no interceptor garante que, se o servidor invalidar a sessão (por expiração de cookie, revogação, etc.), a UI seja atualizada e rotas protegidas redirecionem imediatamente para `/login`.
+- Tratar `401` no interceptor via `logout()` garante que, se o servidor invalidar a sessão (por expiração de cookie, revogação, etc.), o estado seja limpo de forma centralizada, a UI seja atualizada e rotas protegidas redirecionem imediatamente para `/login`.
 
 Novas funcionalidades implementadas
 
