@@ -106,10 +106,11 @@ export function Register() {
             </label>
             <input
                {...register('confirmPassword')}
-             
+              type="password"
               placeholder="*********"
               className="w-full pl-3.5 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.confirmPassword && <span className='text-red-500 text-sm'>{errors.confirmPassword.message}</span>}
 
               <button
               type="submit"
