@@ -16,9 +16,17 @@ export function RecentItens() {
               key={item.id}
               className="bg-white rounded-lg shadow-md p-3 flex gap-4 items-start max-w-xs"
             >
-              <div className="h-14 w-14 bg-gray-100 rounded-md flex items-center justify-center flex-shrink-0 text-xl">
-                📷
-              </div>
+              {item.imageUrl ? (
+                <img
+                  src={item.imageUrl}
+                  alt={item.nome}
+                  className="h-14 w-14 object-cover rounded-md flex-shrink-0"
+                />
+              ) : (
+                <div className="h-14 w-14 bg-gray-100 rounded-md flex items-center justify-center flex-shrink-0 text-xl">
+                  📷
+                </div>
+              )}
               <div className="flex-1">
                 <h3 className="font-semibold text-sm">{item.nome}</h3>
                 <div className="flex flex-wrap gap-2 mt-1">

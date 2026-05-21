@@ -15,6 +15,13 @@ export function ItemDetalhes() {
   return (
     <main className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+        {item.imageUrl && (
+          <img
+            src={item.imageUrl}
+            alt={item.nome}
+            className="w-full h-64 object-cover rounded-lg mb-4"
+          />
+        )}
         <h1 className="text-2xl font-bold text-gray-900 mb-4">{item.nome}</h1>
         <p className="text-gray-700 mb-2">
           <strong className="font-semibold">Local:</strong> {item.local}

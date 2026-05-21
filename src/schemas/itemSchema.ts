@@ -5,4 +5,5 @@ export const itemSchema = z.object({
     categoria: z.string().min(1,"Categoria é Obrigatório"),
     local: z.string().min(1,"Local é Obrigatório"),
     observacao: z.string().optional(),
+    imageUrl: z.string().optional(),
 })

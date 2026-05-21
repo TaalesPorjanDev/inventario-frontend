@@ -11,6 +11,8 @@ import { Toast } from "./components/Toast";
 import { useToastStore } from "./store/toastStore";
 import { Register } from "./pages/Register";
 import { ProtectedLayout } from "./components/ProtectedLayout";
+import { ItemDetalhes } from "./pages/ItemDetalhes";
+import { RecentItens } from "./pages/RecentItens";
 
 export function App() {
   const { visible, message, type, hideToast } = useToastStore();
@@ -26,6 +28,8 @@ export function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/adicionar" element={<ItemForm />} />
             <Route path="/editar/:id" element={<EditarItem />} />
+            <Route path="/detalhes/:id" element={<ItemDetalhes />} />
+            <Route path="/recentes" element={<RecentItens />} />
           </Route>
         </Route>
       </Routes>
