@@ -1,14 +1,16 @@
+import { Camera, Clock, Loader2 } from 'lucide-react';
+import { itemSchema } from '../schemas/itemSchema';
+import { ItemFormFields } from './ItemFormFields';
+import type { ItemFormData } from '../schemas/itemSchema';
+import { Link, useNavigate } from 'react-router-dom'; 
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
 import { useToastStore } from '../store/toastStore';
-import { Camera, Clock, Loader2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { itemSchema } from '../schemas/itemSchema';
-import type { z } from 'zod';
+import { useForm } from 'react-hook-form'; 
+import { zodResolver } from '@hookform/resolvers/zod'; 
 
-type ItemFormData = z.infer<typeof itemSchema>;
+
+
 
 export function ItemForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,6 +41,24 @@ export function ItemForm() {
     }
   }
 
+  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      if(typeof reader.result === 'string') {
+        setImageUrl(reader.result)
+      }
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   return (
     <main className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-xl mx-auto px-4">
@@ -54,74 +74,8 @@ export function ItemForm() {
             <fieldset>
               <legend className="sr-only">Detalhes do Item</legend>
 
-              {/* Nome */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nome do Item
-                </label>
-                <input
-                  {...register('nome')}
-                  type="text"
-                  placeholder="Ex: Câmera Mirrorless"
-                  className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {errors.nome && <span className="text-red-500 text-sm">{errors.nome.message}</span>}
-              </div>
-
-              {/* Categoria e Local */}
-              <div className="flex gap-4 mb-6">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Categoria
-                  </label>
-                  <select
-                    {...register('categoria')}
-                    className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Eletrodomésticos">Eletrodomésticos</option>
-                    <option value="Eletrônicos">Eletrônicos</option>
-                    <option value="Móveis">Móveis</option>
-                    <option value="Decoração">Decoração</option>
-                    <option value="Outros">Outros</option>
-                  </select>
-                  {errors.categoria && <span className="text-red-500 text-sm">{errors.categoria.message}</span>}
-                </div>
-
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Localização
-                  </label>
-                  <select
-                    {...register('local')}
-                    className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Sala">Sala</option>
-                    <option value="Quarto">Quarto</option>
-                    <option value="Cozinha">Cozinha</option>
-                    <option value="Escritório">Escritório</option>
-                    <option value="Garagem">Garagem</option>
-                    <option value="Outros">Outros</option>
-                  </select>
-                  {errors.local && <span className="text-red-500 text-sm">{errors.local.message}</span>}
-                </div>
-              </div>
-
-              {/* Observação */}
-              <div className="mb-6">
-                <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-1">
-                  Observação
-                  <span className="text-gray-400 text-xs ml-2">Opcional</span>
-                </label>
-                <textarea
-                  {...register('observacao')}
-                  rows={6}
-                  placeholder="Adicione detalhes como número de série, data de compra..."
-                  className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                />
-                {errors.observacao && <span className="text-red-500 text-sm">{errors.observacao.message}</span>}
-              </div>
+              <ItemFormFields register={register} errors={errors}/>
+             
 
               {/* Botões */}
               <div className="flex justify-end gap-3 pt-4 mt-2 border-t border-gray-100">
@@ -156,10 +110,9 @@ export function ItemForm() {
               <Camera className="h-6 w-6 text-blue-600 mb-2" />
               <h3 className="font-semibold text-gray-700 text-sm mb-2">Adicionar Foto</h3>
               <input
-                type="text"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="Cole o link da imagem"
+                type="file"
+                accept="image/png, image/jpeg, image/webp"
+                onChange={handleImageChange}
                 className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
               />
               {imageUrl && (

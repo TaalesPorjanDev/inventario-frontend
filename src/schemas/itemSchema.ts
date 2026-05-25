@@ -6,4 +6,7 @@ export const itemSchema = z.object({
     local: z.string().min(1,"Local é Obrigatório"),
     observacao: z.string().optional(),
     imageUrl: z.string().optional(),
-})
+    
+});
+
+export type ItemFormData = z.infer<typeof itemSchema>;

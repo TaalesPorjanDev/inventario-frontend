@@ -51,7 +51,8 @@ export const useItemStore = create<ItemStore>((set, get) => ({
   atualizarItem(id, dadosAtualizados) {
     const listaAtualizada = get().itens;
     const novaLista = listaAtualizada.map((itemAtual) =>
-      itemAtual.id === id ? { ...dadosAtualizados, id } : itemAtual
+      itemAtual.id === id ? {...itemAtual, ...dadosAtualizados}
+      : itemAtual
     );
     set({ itens: novaLista });
     localStorage.setItem('itens', JSON.stringify(novaLista));
