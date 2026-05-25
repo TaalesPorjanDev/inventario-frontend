@@ -2,12 +2,13 @@ import { Camera, Clock, Loader2 } from 'lucide-react';
 import { itemSchema } from '../schemas/itemSchema';
 import { ItemFormFields } from './ItemFormFields';
 import type { ItemFormData } from '../schemas/itemSchema';
-import { Link, useNavigate } from 'react-router-dom'; // deixa o navigate
+import { Link, useNavigate } from 'react-router-dom'; 
 import { useState } from 'react';
 import { useItemStore } from '../store/itemStore';
 import { useToastStore } from '../store/toastStore';
-import { useForm } from 'react-hook-form'; // deixa
-import { zodResolver } from '@hookform/resolvers/zod'; //deixa 
+import { useForm } from 'react-hook-form'; 
+import { zodResolver } from '@hookform/resolvers/zod'; 
+
 
 
 
@@ -38,6 +39,24 @@ export function ItemForm() {
       setIsSubmitting(false);
       showToast("Erro ao adicionar item", "error");
     }
+  }
+
+  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      if(typeof reader.result === 'string') {
+        setImageUrl(reader.result)
+      }
+    };
+
+    reader.readAsDataURL(file);
   }
 
   return (
@@ -91,10 +110,9 @@ export function ItemForm() {
               <Camera className="h-6 w-6 text-blue-600 mb-2" />
               <h3 className="font-semibold text-gray-700 text-sm mb-2">Adicionar Foto</h3>
               <input
-                type="text"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="Cole o link da imagem"
+                type="file"
+                accept="image/png, image/jpeg, image/webp"
+                onChange={handleImageChange}
                 className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
               />
               {imageUrl && (
