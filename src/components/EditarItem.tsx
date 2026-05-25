@@ -5,11 +5,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
 import { useToastStore } from '../store/toastStore';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod'
+
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ItemFormFields } from './ItemFormFields';
+import type { ItemFormData } from '../schemas/itemSchema';
 
 
-type ItemFormData = z.infer<typeof itemSchema>
+
 
 export function EditarItem() {
   const { showToast } = useToastStore();
@@ -67,78 +69,16 @@ export function EditarItem() {
 
           <fieldset>
             <legend className='sr-only'></legend>
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nome do Item
-            </label>
-            <input
-              {...register('nome')}
-              type="text"
-              placeholder="Ex: Câmera Mirrorless"
-              className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.nome && <span className='text-red-500 text-sm'>{errors.nome.message}</span>}
-          </div>
-
-          <div className="flex gap-4 mb-6">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Categoria
-              </label>
-              <select
-                {...register('categoria')}
-                id="categoria"
-                className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Selecione</option>
-                <option value="Eletrodomésticos">Eletrodomésticos</option>
-                <option value="Eletrônicos">Eletrônicos</option>
-                <option value="Móveis">Móveis</option>
-                <option value="Decoração">Decoração</option>
-                <option value="Outros">Outros</option>
-              </select>
-              {errors.categoria && <span className='text-red-500 text-sm'>{errors.categoria.message}</span>}
-            </div>
-
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Localização
-              </label>
-              <select
-                {...register('local')}
-                id="localizacao"
-                className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Selecione</option>
-                <option value="Sala">Sala</option>
-                <option value="Quarto">Quarto</option>
-                <option value="Cozinha">Cozinha</option>
-                <option value="Escritório">Escritório</option>
-                <option value="Garagem">Garagem</option>
-                <option value="Outros">Outros</option>
-              </select>
-              {errors.local && <span className='text-red-500 text-sm'>{errors.local.message}</span>}
-            </div>
-          </div>
-          <div className="mb-6">
-            <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-1">
-              Observacao
-              <span className="text-gray-400 text-xs ml-2">Opcional</span>
-            </label>
-            <textarea
-              {...register('observacao')}
-              id="observacao"
-              
-              rows={6}
-              placeholder="Adicione detalhes como número de série, data de compra..."
-              
-              className="w-full border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            ></textarea>
-            {errors.observacao && <span className='text-red-500 text-sm'>{errors.observacao.message}</span>}
-            
-          </div>
+            <ItemFormFields register={register} errors={errors} />
           </fieldset>
           <div className="flex justify-end gap-3 pt-4 mt-2 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="px-6 py-4 text-[#505F76] hover:bg-gray-100 rounded-md transition-colors"
+            >
+              Cancelar
+            </button>
             <button
               type="submit"
               disabled={isSubmitting}
@@ -154,13 +94,7 @@ export function EditarItem() {
                 "Salvar"
               )}
             </button>
-            <button
-              type="button"
-              onClick={() => navigate('/')}
-              className="px-6 py-4 text-[#505F76] hover:bg-gray-100 rounded-md transition-colors"
-            >
-              Cancelar
-            </button>
+            
           </div>
           
         </div>
