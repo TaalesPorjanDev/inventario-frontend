@@ -8,7 +8,7 @@ Sistema web completo para gerenciamento de itens domésticos. Permite cadastrar,
 
 ## ✨ Funcionalidades
 
-- ✅ **Autenticação:** Login, cadastro e logout com JWT
+- ✅ **Autenticação:** Login, cadastro e logout com cookie httpOnly (JWT)
 - ✅ **CRUD completo:** Criar, ler, editar e deletar itens
 - ✅ **Filtros:** Por categoria e localização
 - ✅ **Detalhes do item:** Página com informações completas
@@ -20,10 +20,10 @@ Sistema web completo para gerenciamento de itens domésticos. Permite cadastrar,
 
 ## 🛠️ Tecnologias
 
-| Frontend | Estado | Estilização | Roteamento | Outros |
-|----------|--------|-------------|------------|--------|
-| React 18 | Zustand | Tailwind CSS | React Router DOM | Axios |
-| TypeScript | react-hook-form | Lucide React | | Vite |
+| Frontend | Backend | Estado | Estilização |
+|----------|---------|--------|-------------|
+| React 19 + TypeScript | Node + Express | Zustand | Tailwind CSS |
+| Vite | JWT + cookies | react-hook-form | React Router |
 
 ---
 
@@ -31,58 +31,51 @@ Sistema web completo para gerenciamento de itens domésticos. Permite cadastrar,
 
 ### Pré-requisitos
 - Node.js (versão 18 ou superior)
-- npm ou yarn
+- npm
 
-### Passos
+### 1. Frontend
 
 ```bash
-# Clone o repositório
-git clone https://github.com/TaalesPorjanDev/inventario-frontend.git
-
-# Acesse a pasta do projeto
-cd inventario-frontend
-
 # Instale as dependências
 npm install
 
-# Configure as variáveis de ambiente
-# Crie um arquivo .env na raiz com:
-VITE_API_URL=https://inventario-backend-mw06.onrender.com/api/v1
+# Configure a URL da API (copie o exemplo)
+cp .env.example .env
 
-# Rode o projeto
+# Rode o frontend
 npm run dev
+```
 
+O frontend sobe em `http://localhost:5173`.
 
-📁 Estrutura do projeto
+### 2. Backend (autenticação)
 
-src/
-├── components/     # Componentes reutilizáveis (ItemCard, Menu, Toast, etc.)
-├── pages/          # Páginas da aplicação (Home, Login, Register, etc.)
-├── store/          # Zustand stores (itens, toast)
-├── services/       # Configuração do axios (API)
-├── types/          # Interfaces TypeScript
-├── hooks/          # Hooks customizados (useLogin)
-├── utils/          # Funções utilitárias (validação de token)
-└── assets/         # Imagens e logos
-🔗 Links
-Frontend: https://inventario-frontend.vercel.app
+Em outro terminal:
 
-Backend API: https://inventario-backend-mw06.onrender.com/api/v1
+```bash
+cd backend
+npm install
+cp .env.example .env
+npm run dev
+```
 
-Swagger: https://inventario-backend-mw06.onrender.com/docs
+O backend sobe em `http://localhost:3000` com a API em `/api/v1`.
 
-👨‍💻 Autor
-Tales Porjan
+## 📁 Estrutura do projeto
 
-GitHub: @TaalesPorjanDev
+```
+src/                 # Frontend React
+backend/             # API Node + Express (auth)
+├── src/
+│   ├── routes/      # Rotas de autenticação
+│   ├── middleware/  # Verificação de JWT
+│   └── utils/       # Persistência simples em JSON
+└── data/            # Usuários cadastrados (local)
+```
 
-LinkedIn: Tales Porjan
+## 🔗 Links
 
-🙏 Agradecimentos
-Sandro Moraes – Backend e integração da API
-
-📄 Licença
-Este projeto está sob a licença MIT.
+Frontend (deploy): https://inventario-frontend.vercel.app
 
 
 

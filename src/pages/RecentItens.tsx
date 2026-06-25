@@ -1,8 +1,22 @@
+import { useEffect } from 'react';
 import { useItemStore } from '../store/itemStore';
 
 export function RecentItens() {
-  const { itens } = useItemStore();
+  const { itens, carregarItens, loading } = useItemStore();
+
+  useEffect(() => {
+    carregarItens();
+  }, [carregarItens]);
+
   const itensRecentes = [...itens].reverse();
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-500">Carregando itens...</p>
+      </main>
+    );
+  }
   return (
     <main className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">

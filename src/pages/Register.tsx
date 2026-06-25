@@ -1,3 +1,4 @@
+import axios from 'axios';
 import api from '../services/api';
 import LogoSvg from '../assets/logo.svg';
 import { Loader2 } from 'lucide-react';
@@ -37,12 +38,8 @@ export function Register() {
         navigate('/login');
       },1000)
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        if (error.message.includes('Email already exists')) {
-          showToast('Email já cadastrado. Faça login ou use outro email.', 'error')
-        } else {
-          showToast('Erro ao cadastrar. Tente novamente.', 'error')
-        }
+      if (axios.isAxiosError(error) && error.response?.data?.message === 'Email already exists') {
+        showToast('Email já cadastrado. Faça login ou use outro email.', 'error')
       } else {
         showToast('Erro ao cadastrar. Tente novamente.', 'error')
       }

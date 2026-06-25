@@ -6,14 +6,22 @@ import { useToastStore } from '../store/toastStore';
 
 
 export function HomePage() {
-  const { itens, removerItem, carregarItens } = useItemStore();
+  const { itens, removerItem, carregarItens, loading } = useItemStore();
   const [filtroCategoria, setFiltroCategoria] = useState('');
   const [filtroLocal, setFiltroLocal] = useState('');
   const { showToast } = useToastStore();
 
   useEffect(() => {
     carregarItens();
-  }, []);
+  }, [carregarItens]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-500">Carregando itens...</p>
+      </main>
+    );
+  }
 
   const itensFiltrados = itens.filter((item) => {
     const mathCategoria = filtroCategoria === '' || item.categoria === filtroCategoria;
@@ -79,11 +87,11 @@ export function HomePage() {
             <li key={item.id}>
             <ItemCard
               item={item}
-              onDelete={() => {
-                removerItem(item.id)
-                showToast("Item Removido com sucesso", "success")
+              onDelete={async () => {
+                await removerItem(item.id);
+                showToast("Item Removido com sucesso", "success");
               }}
-             /> 
+             />
             </li>
           ))}
         </ul>
