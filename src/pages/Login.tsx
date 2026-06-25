@@ -17,8 +17,6 @@ export function Login() {
   const { login, loading } = useLogin();
 
   async function onSubmit(data:LoginData) {
-    console.log("OnSubmit foi chamado!", data);
-    
     await login({
       email: data.email,
       password: data.password

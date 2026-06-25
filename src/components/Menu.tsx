@@ -1,26 +1,9 @@
 import LogoSvg from '../assets/logo.svg';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import { useLogout } from '../hooks/useLogout';
 
 export function Menu() {
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    try {
-      await api.post(
-        "/auth/logout",
-        {},
-        {
-          withCredentials: true,
-        },
-      );
-
-      navigate("/login");
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const { logout } = useLogout();
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -41,7 +24,7 @@ export function Menu() {
               + Novo Item
             </button>
           </Link>
-          <button className='bg-red-500 text-white hover:bg-red-700 rounded-md px-3 md:px-4 py-2 text-xs md:text-sm whitespace-nowrap' onClick={handleLogout}>Sair</button>
+          <button className='bg-red-500 text-white hover:bg-red-700 rounded-md px-3 md:px-4 py-2 text-xs md:text-sm whitespace-nowrap' onClick={logout}>Sair</button>
         </div>
       </div>
     </nav>

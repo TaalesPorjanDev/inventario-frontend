@@ -24,20 +24,20 @@ export function ItemForm() {
   const { adicionarItem } = useItemStore();
   const navigate = useNavigate();
 
-  function onSubmit(data: ItemFormData) {
+  async function onSubmit(data: ItemFormData) {
     setIsSubmitting(true);
     try {
       const { nome, categoria, local, observacao } = data;
-      adicionarItem({ nome, categoria, local, observacao, imageUrl });
+      await adicionarItem({ nome, categoria, local, observacao, imageUrl });
       showToast("Item adicionado com sucesso!", "success");
 
       setTimeout(() => {
         setIsSubmitting(false);
         navigate('/');
       }, 1000);
-    } catch (error) {
+    } catch {
       setIsSubmitting(false);
-      showToast("Erro ao adicionar item", "error");
+      showToast("Erro ao adicionar item. Verifique se o backend está rodando.", "error");
     }
   }
 
@@ -103,6 +103,8 @@ export function ItemForm() {
               </div>
             </fieldset>
           </div>
+
+          
 
           {/* Cards extras */}
           <div className="flex flex-col md:flex-row gap-6 mt-6">

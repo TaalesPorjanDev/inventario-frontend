@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import api from "../services/api";
 import { useAuthStore } from "../store/authStore";
+import { useItemStore } from "../store/itemStore";
 
 export function useLogout() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export function useLogout() {
       }
     } finally {
       useAuthStore.getState().logout();
+      useItemStore.getState().limparItens();
       navigate("/login", { replace: true });
     }
   }

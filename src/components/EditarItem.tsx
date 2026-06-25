@@ -24,14 +24,18 @@ export function EditarItem() {
   const { id: idParam } = useParams<{ id: string }>();
   const id = idParam!;
 
-  const { itens, atualizarItem } = useItemStore();
+  const { itens, atualizarItem, carregarItens, loading, hasLoaded } = useItemStore();
   const itemAtual = itens.find((item) => item.id === id);
 
   useEffect(() => {
-    if (!itemAtual) {
+    carregarItens();
+  }, [carregarItens]);
+
+  useEffect(() => {
+    if (hasLoaded && !itemAtual) {
       navigate('/');
     }
-  }, [itemAtual, navigate]);
+  }, [itemAtual, hasLoaded, navigate]);
 
   useEffect(() => {
     if (itemAtual) {
@@ -44,19 +48,27 @@ export function EditarItem() {
     }
   }, [itemAtual, reset]);
 
-  function onSubmit(data: ItemFormData) {
+  if (loading || !hasLoaded || !itemAtual) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-500">Carregando item...</p>
+      </main>
+    );
+  }
+
+  async function onSubmit(data: ItemFormData) {
     setIsSubmitting(true)
     try {
-      atualizarItem(id, data)
+      await atualizarItem(id, data)
       showToast("Item atualizado com sucesso", "success")
       setTimeout(() => {
         setIsSubmitting(false)
         navigate('/')
       }, 1000)
 
-    } catch(error) {
+    } catch {
       setIsSubmitting(false)
-      showToast("Erro ao adicionar item", "error")
+      showToast("Erro ao atualizar item", "error")
     }
   }
 

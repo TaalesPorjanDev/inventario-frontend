@@ -1,11 +1,26 @@
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useItemStore } from '../store/itemStore';
 import { Pencil, Trash2 } from 'lucide-react';
+import { useToastStore } from '../store/toastStore';
 
 export function ItemDetalhes() {
   const navigate = useNavigate();
-  const { itens, removerItem } = useItemStore();
+  const { itens, removerItem, carregarItens, loading, hasLoaded } = useItemStore();
+  const { showToast } = useToastStore();
   const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    carregarItens();
+  }, [carregarItens]);
+
+  if (loading || !hasLoaded) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-500">Carregando item...</p>
+      </main>
+    );
+  }
 
   const item = itens.find((item) => item.id === id);
   if (!item) {
@@ -13,9 +28,10 @@ export function ItemDetalhes() {
     return null;
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm('Tem certeza que deseja excluir este item?')) {
-      removerItem(item.id);
+      await removerItem(item.id);
+      showToast('Item removido com sucesso', 'success');
       navigate('/');
     }
   };
