@@ -96,8 +96,8 @@ router.get("/me", authMiddleware, (req, res) => {
 router.post("/logout", (_req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
 
   return res.json({ message: "Logout realizado com sucesso" });
