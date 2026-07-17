@@ -14,8 +14,8 @@ const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: true, // sempre true em produção com HTTPS
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
