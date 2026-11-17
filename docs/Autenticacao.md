@@ -22,6 +22,8 @@ Fluxo principal
    - Chama `setAuthenticated(true)` na store
    - Mostra um toast e navega para `/`
 
+O cadastro de contas não está disponível no frontend. A rota antiga `/register` redireciona para `/login`.
+
 Arquivos relevantes
 
 - [src/store/authStore.ts](src/store/authStore.ts)
@@ -71,18 +73,18 @@ Mudanças aplicadas neste commit
 
 - `src/hooks/validateAuth.ts`: agora chama `setLoading(true)` no início da verificação para garantir que o estado de carregamento reflita a checagem em andamento.
 - `src/store/authStore.ts`: adicionado método `logout()` que reseta `isAuthenticated` para `false` e `loading` para `false` (útil para limpar estado ao deslogar).
-- `src/services/api.ts`: interceptor de respostas agora trata `401` explicitamente chamando `useAuthStore.getState().logout()` para sincronizar o estado do frontend quando o backend rejeita a sessão.
+- `src/services/api.ts`: interceptor de respostas trata `401` explicitamente chamando `useAuthStore.getState().logout()` para sincronizar o estado do frontend quando a API rejeita a sessão.
 
 Motivação das mudanças
 
 - `setLoading(true)` evita janelas onde `loading` poderia estar `false` enquanto uma revalidação está em andamento (especialmente em revalidações manuais ou múltiplos mounts).
 - `logout()` dá uma forma centralizada e síncrona de resetar o estado de autenticação sem depender de efeitos colaterais externos.
-- Tratar `401` no interceptor via `logout()` garante que, se o servidor invalidar a sessão (por expiração de cookie, revogação, etc.), o estado seja limpo de forma centralizada, a UI seja atualizada e rotas protegidas redirecionem imediatamente para `/login`.
+- Tratar `401` no interceptor via `logout()` garante que, se a API invalidar a sessão (por expiração de cookie, revogação, etc.), o estado seja limpo de forma centralizada, a UI seja atualizada e rotas protegidas redirecionem imediatamente para `/login`.
 
 Novas funcionalidades implementadas
 
 - `POST /auth/logout` ao deslogar: adicionado o hook `src/hooks/useLogout.ts` que realiza um `POST /auth/logout` (com `withCredentials: true`) e, independentemente do resultado, chama `useAuthStore.getState().logout()` e navega para `/login`.
-- Redirecionamento automático ao `401`: o interceptor de respostas em `src/services/api.ts` agora chama `useAuthStore.getState().logout()` e faz `window.location.replace('/login')` quando recebe `401` do servidor.
+- Redirecionamento automático ao `401`: o interceptor de respostas em `src/services/api.ts` chama `useAuthStore.getState().logout()` e faz `window.location.replace('/login')` quando recebe `401` da API.
 
 Uso sugerido
 

@@ -1,5 +1,4 @@
 import LogoSvg from '../assets/logo.svg';
-import { Link } from 'react-router-dom';
 import { Mail, Lock, LogIn, Loader2 } from 'lucide-react';
 import { useLogin } from '../hooks/useLogin';
 import { useForm } from 'react-hook-form';
@@ -98,12 +97,6 @@ export function Login() {
                 </>
               )}
             </button>
-            <div className="text-center text-sm text-gray-600 mt-4">
-              Ainda não possui uma conta?{' '}
-              <Link to="/register" className="text-blue-600 hover:underline">
-                Cadastre-se agora
-              </Link>
-            </div>
           </form>
         </div>
       </div>

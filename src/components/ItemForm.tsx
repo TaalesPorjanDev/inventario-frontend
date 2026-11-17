@@ -37,7 +37,7 @@ export function ItemForm() {
       }, 1000);
     } catch {
       setIsSubmitting(false);
-      showToast("Erro ao adicionar item. Verifique se o backend está rodando.", "error");
+      showToast("Erro ao adicionar item.", "error");
     }
   }
 

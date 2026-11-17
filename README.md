@@ -1,6 +1,6 @@
 # 📦 Meu Inventário
 
-Sistema web completo para gerenciamento de itens domésticos. Permite cadastrar, listar, editar, deletar itens, com autenticação de usuários e layout responsivo.
+Aplicação web para gerenciamento de itens domésticos. Permite cadastrar, listar, editar e remover itens, com autenticação de usuários e layout responsivo.
 
 🔗 **Deploy:** [inventario-frontend.vercel.app](https://inventario-frontend.vercel.app)
 
@@ -8,7 +8,7 @@ Sistema web completo para gerenciamento de itens domésticos. Permite cadastrar,
 
 ## ✨ Funcionalidades
 
-- ✅ **Autenticação:** Login, cadastro e logout com cookie httpOnly (JWT)
+- ✅ **Autenticação:** Login e logout por API
 - ✅ **CRUD completo:** Criar, ler, editar e deletar itens
 - ✅ **Filtros:** Por categoria e localização
 - ✅ **Detalhes do item:** Página com informações completas
@@ -20,10 +20,10 @@ Sistema web completo para gerenciamento de itens domésticos. Permite cadastrar,
 
 ## 🛠️ Tecnologias
 
-| Frontend | Backend | Estado | Estilização |
-|----------|---------|--------|-------------|
-| React 19 + TypeScript | Node + Express | Zustand | Tailwind CSS |
-| Vite | JWT + cookies | react-hook-form | React Router |
+| Interface | Estado | Comunicação | Estilização |
+|-----------|--------|-------------|-------------|
+| React 19 + TypeScript | Zustand | Axios | Tailwind CSS |
+| Vite | react-hook-form | React Router | Zod |
 
 ---
 
@@ -39,7 +39,7 @@ Sistema web completo para gerenciamento de itens domésticos. Permite cadastrar,
 # Instale as dependências
 npm install
 
-# Configure a URL da API (copie o exemplo)
+# Configure a URL da API externa (copie o exemplo)
 cp .env.example .env
 
 # Rode o frontend
@@ -48,29 +48,18 @@ npm run dev
 
 O frontend sobe em `http://localhost:5173`.
 
-### 2. Backend (autenticação)
-
-Em outro terminal:
-
-```bash
-cd backend
-npm install
-cp .env.example .env
-npm run dev
-```
-
-O backend sobe em `http://localhost:3000` com a API em `/api/v1`.
+O cadastro de contas está desativado. A tela de login é destinada a usuários existentes.
 
 ## 📁 Estrutura do projeto
 
 ```
-src/                 # Frontend React
-backend/             # API Node + Express (auth)
-├── src/
-│   ├── routes/      # Rotas de autenticação
-│   ├── middleware/  # Verificação de JWT
-│   └── utils/       # Persistência simples em JSON
-└── data/            # Usuários cadastrados (local)
+src/
+├── components/      # Componentes de interface
+├── hooks/           # Hooks de autenticação
+├── pages/           # Páginas da aplicação
+├── services/        # Cliente da API
+├── store/           # Estado global
+└── types/           # Tipos compartilhados
 ```
 
 ## 🔗 Links

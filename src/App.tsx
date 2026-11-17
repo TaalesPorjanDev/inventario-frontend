@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { HomePage } from "./pages/HomePage";
 import { Login } from "./pages/Login";
@@ -9,7 +9,6 @@ import { Layout } from "./components/Layout";
 import { Toast } from "./components/Toast";
 
 import { useToastStore } from "./store/toastStore";
-import { Register } from "./pages/Register";
 import { ProtectedLayout } from "./components/ProtectedLayout";
 import { ItemDetalhes } from "./pages/ItemDetalhes";
 import { RecentItens } from "./pages/RecentItens";
@@ -21,7 +20,7 @@ export function App() {
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Navigate to="/login" replace />} />
 
         <Route element={<ProtectedLayout />}>
           <Route element={<Layout />}>
